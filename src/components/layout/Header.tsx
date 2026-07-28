@@ -4,7 +4,9 @@ import { ROUTES } from '@/routes/paths'
 
 const NAV_ITEMS = [
   { to: ROUTES.home, label: 'Início', end: true },
-  { to: ROUTES.dashboard, label: 'Dashboard', end: false },
+  { to: ROUTES.roca, label: 'Minha Roça', end: false },
+  { to: ROUTES.galpao, label: 'Meu Galpão', end: false },
+  { to: ROUTES.financas, label: 'Finanças', end: false },
   { to: ROUTES.about, label: 'Sobre', end: false },
 ]
 

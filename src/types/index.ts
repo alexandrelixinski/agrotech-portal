@@ -1,13 +1,3 @@
-export type Culture = 'soja' | 'milho' | 'cafe' | 'cana'
-
-export type Field = {
-  id: string
-  name: string
-  culture: Culture
-  areaHectares: number
-  status: 'plantio' | 'crescimento' | 'colheita'
-}
-
 // --- Domínio AgroTech (Supabase) ---
 
 export type CategoriaInsumo = 'Sementes' | 'Adubos' | 'Diesel' | 'Defensivos' | 'Outros'

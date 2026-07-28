@@ -36,6 +36,17 @@ export async function updateQuantidadeItemEstoque(id: string, quantidade: number
   if (error) throw new Error(error.message)
 }
 
+export async function restockItemEstoque(
+  id: string,
+  input: { quantidade: number; precoUnitario: number },
+): Promise<void> {
+  const { error } = await supabase
+    .from('itens_estoque')
+    .update({ quantidade: input.quantidade, preco_unitario: input.precoUnitario })
+    .eq('id', id)
+  if (error) throw new Error(error.message)
+}
+
 export async function deleteItemEstoque(id: string): Promise<void> {
   const { error } = await supabase.from('itens_estoque').delete().eq('id', id)
   if (error) throw new Error(error.message)

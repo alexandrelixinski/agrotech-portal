@@ -8,6 +8,17 @@
   --color-primary-dark: #24632a;
   --radius: 10px;
   --max-width: 1080px;
+  --color-danger: #b42318;
+  --color-danger-bg: rgba(220, 38, 38, 0.1);
+  --color-warning: #92400e;
+  --color-warning-bg: rgba(217, 119, 6, 0.12);
+
+  /* Paleta categórica (5 slots, ordem fixa — ver skill dataviz) */
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
 
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   color-scheme: light dark;
@@ -22,6 +33,14 @@
     --color-muted: #a9b5a2;
     --color-primary: #6cc36f;
     --color-primary-dark: #57a95a;
+    --color-danger: #f87171;
+    --color-warning: #fbbf24;
+
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --series-4: #c98500;
+    --series-5: #d55181;
   }
 }
 
@@ -132,6 +151,18 @@ a {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 800px) {
+  .two-col {
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
 .page-header h1 {
   margin: 0 0 0.25rem;
   font-size: 1.75rem;
@@ -182,6 +213,15 @@ a {
 
 .card__footer {
   margin-top: 1rem;
+}
+
+.card summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.card summary + p {
+  margin-top: 0.6rem;
 }
 
 /* Button */
@@ -256,4 +296,240 @@ a {
   color: var(--color-muted);
   display: grid;
   gap: 0.4rem;
+}
+
+/* Forms */
+.form-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.field label {
+  font-weight: 600;
+}
+
+.field input,
+.field select,
+.field textarea {
+  font: inherit;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
+/* Alerts */
+.alert {
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+}
+
+.alert--error {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+}
+
+.alert--warning {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+  border: 1px solid var(--color-warning);
+}
+
+.alert--info {
+  background-color: rgba(47, 125, 50, 0.1);
+  color: var(--color-primary-dark);
+  border: 1px solid var(--color-primary);
+}
+
+/* Lote card (Roça) */
+.lote-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.lote-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.lote-card__meta {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  margin: 0.2rem 0 0;
+}
+
+.lote-card__actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.lote-card__section {
+  border-top: 1px solid var(--color-border);
+  padding-top: 1rem;
+}
+
+.diario-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.875rem;
+}
+
+.diario-item:last-child {
+  border-bottom: none;
+}
+
+.diario-item__desc {
+  color: var(--color-text);
+}
+
+.diario-item__meta {
+  color: var(--color-muted);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stack-sm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0 0.15rem;
+  line-height: 1;
+}
+
+.icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Distribuição de estoque (barra empilhada) */
+.stacked-bar {
+  display: flex;
+  height: 20px;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: var(--color-border);
+}
+
+.stacked-bar__segment {
+  height: 100%;
+  margin-inline-end: 2px;
+}
+
+.stacked-bar__segment:last-child {
+  margin-inline-end: 0;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  margin-top: 0.85rem;
+}
+
+.legend__item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.legend__swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  align-self: center;
+}
+
+.legend__label {
+  color: var(--color-text);
+}
+
+.legend__value {
+  color: var(--color-muted);
+}
+
+.meter-row__header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
+}
+
+.meter-row__header .legend__value {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* Barra de magnitude (ranking, hue única) */
+.meter {
+  height: 6px;
+  border-radius: 3px;
+  background-color: var(--color-border);
+  overflow: hidden;
+}
+
+.meter__fill {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 3px;
+}
+
+/* Abas de categoria (Galpão) */
+.category-tabs {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.category-tabs__btn {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.category-tabs__btn--active {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 600;
 }
