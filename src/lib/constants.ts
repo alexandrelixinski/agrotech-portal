@@ -6,3 +6,11 @@ export const APP_VERSION = '0.1.0'
  * Environment Variables do projeto na Vercel (produção).
  */
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? ''
+
+/**
+ * Credenciais do Supabase. Configure em `.env.local` (dev) e nas
+ * Environment Variables do projeto na Vercel (produção).
+ * Valores em Project Settings → API no dashboard do Supabase.
+ */
+export const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
+export const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY

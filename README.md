@@ -67,11 +67,21 @@ O alias `@/` aponta para `src/` (configurado em `vite.config.ts` e `tsconfig.app
 
 Apenas variáveis com prefixo `VITE_` são expostas ao browser. Veja `.env.example`.
 
-| Variável            | Descrição                 |
-| ------------------- | ------------------------- |
-| `VITE_API_BASE_URL` | URL base da API do portal |
+| Variável                 | Descrição                                                                |
+| ------------------------ | ------------------------------------------------------------------------- |
+| `VITE_API_BASE_URL`      | URL base da API do portal (não usada pelas telas que consomem Supabase) |
+| `VITE_SUPABASE_URL`      | URL do projeto Supabase (Project Settings → API)                        |
+| `VITE_SUPABASE_ANON_KEY` | Chave pública (anon) do projeto Supabase (Project Settings → API)       |
 
 Em produção, cadastre as variáveis em **Project Settings → Environment Variables** na Vercel.
+
+## Supabase
+
+Persistência de dados via Supabase (Postgres + API REST automática), consumido diretamente do frontend com `@supabase/supabase-js` — sem backend próprio. Autenticação ainda não está habilitada (RLS liberado para a chave `anon`).
+
+- Client: `src/lib/supabaseClient.ts`
+- Schema: `supabase/migrations/` (aplicar manualmente pelo SQL Editor do dashboard, colando o conteúdo do arquivo de migration)
+- Services: `src/services/lotes.ts`, `estoque.ts`, `movimentacoes.ts`, `vendas.ts`, `financas.ts`
 
 ## Deploy na Vercel
 
