@@ -59,7 +59,9 @@ O alias `@/` aponta para `src/` (configurado em `vite.config.ts` e `tsconfig.app
 | Path         | Página          |
 | ------------ | --------------- |
 | `/`          | `HomePage`      |
-| `/dashboard` | `DashboardPage` |
+| `/roca`      | `RocaPage`      |
+| `/galpao`    | `GalpaoPage`    |
+| `/financas`  | `FinancasPage`  |
 | `/sobre`     | `AboutPage`     |
 | `*`          | `NotFoundPage`  |
 
