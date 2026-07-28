@@ -24,8 +24,5 @@
     "oxlint": "^1.71.0",
     "typescript": "~6.0.2",
     "vite": "^8.1.1"
-  },
-  "optionalDependencies": {
-    "@oxlint/binding-darwin-arm64": "^1.76.0"
   }
 }
