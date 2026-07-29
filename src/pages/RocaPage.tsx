@@ -1,5 +1,3 @@
-"use client"
-
 import { useMemo, useState } from 'react'
 import { LoteCard } from '@/components/roca/LoteCard'
 import { NovoLoteForm } from '@/components/roca/NovoLoteForm'
@@ -19,7 +17,7 @@ export function RocaPage() {
   const listaLotes = lotes ?? []
 
   const totalLotes = listaLotes.length
-   const plantiosAtivos = lotes?.length || 0
+  const plantiosAtivos = listaLotes.length // Usando o tamanho da lista para evitar o erro de 'status'
 
   const lotesFiltrados = useMemo(() => {
     if (activeFilter === 'Todos') return listaLotes
@@ -71,6 +69,7 @@ export function RocaPage() {
         </div>
       </div>
 
+      {/* FILTROS COM EVENTO DE CLIQUE */}
       <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none mb-6">
         {FILTERS.map((filter) => {
           const isActive = filter === activeFilter
@@ -95,7 +94,7 @@ export function RocaPage() {
         <NovoLoteForm onCreated={refetchLotes} />
       </div>
 
-      {/* LISTAGEM DOS LOTES */}
+      {/* LISTAGEM DOS LOTES FILTRADOS */}
       {loading ? <p className="text-gray-400 text-sm animate-pulse">Carregando lotes...</p> : null}
       {error ? (
         <p className="p-3 bg-red-900/40 text-red-400 rounded-lg text-sm border border-red-500/30 mb-4" role="alert">
@@ -106,7 +105,7 @@ export function RocaPage() {
       {!loading && !error ? (
         lotesFiltrados.length === 0 ? (
           <p className="text-gray-400 text-sm text-center py-6 bg-[#121614] rounded-lg border border-white/5">
-            Nenhum lote cadastrado. Use o formulário acima para começar!
+            Nenhum lote encontrado para esta cultura.
           </p>
         ) : (
           <div className="space-y-4">
@@ -125,5 +124,3 @@ export function RocaPage() {
       ) : null}
 
     </div>
-  )
-}
