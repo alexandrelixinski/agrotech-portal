@@ -19,7 +19,7 @@ export function RocaPage() {
   const listaLotes = lotes ?? []
 
   const totalLotes = listaLotes.length
-  const plantiosAtivos = listaLotes.filter(l => l.status !== 'colhido').length
+   const plantiosAtivos = lotes?.length || 0
 
   const lotesFiltrados = useMemo(() => {
     if (activeFilter === 'Todos') return listaLotes
