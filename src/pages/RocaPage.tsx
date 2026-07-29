@@ -16,8 +16,6 @@ export function RocaPage() {
 
   return (
     <div className="min-h-screen bg-[#040C08] text-white p-4 font-sans max-w-md mx-auto pb-24">
-      
-      {/* 1. CABEÇALHO INTEGRADO */}
       <header className="flex justify-between items-start mb-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight" style={{ color: neonGreen }}>
@@ -36,7 +34,7 @@ export function RocaPage() {
         </div>
       </header>
 
-      {/* 2. MINI-CARDS GRID */}
+    
       <div className="grid grid-cols-2 gap-3 mb-6">
         <div className="bg-[#121614] p-3 rounded-lg border border-white/5 flex flex-col justify-center min-h-[75px]">
           <span className="text-2xl font-bold" style={{ color: neonGreen }}>{totalLotes}</span>
@@ -59,7 +57,7 @@ export function RocaPage() {
         </div>
       </div>
 
-      {/* 3. BOTÕES DE FILTRO OVALADOS */}
+    
       <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none mb-6">
         {filters.map((filter) => {
           const isActive = filter === activeFilter
@@ -78,12 +76,11 @@ export function RocaPage() {
         })}
       </div>
 
-      {/* FORMULÁRIO */}
       <div className="mb-6">
         <NovoLoteForm onCreated={refetchLotes} />
       </div>
 
-      {/* RENDERIZAÇÃO DOS SEUS COMPONENTES EXISTENTES */}
+    
       {loading ? <p className="text-gray-400 text-sm animate-pulse">Carregando lotes…</p> : null}
       {error ? <p className="p-3 bg-red-900/40 text-red-400 rounded-lg text-sm border border-red-500/30 mb-4" role="alert">{error}</p> : null}
 
@@ -110,4 +107,3 @@ export function RocaPage() {
 
     </div>
   )
-}
