@@ -1,100 +1,42 @@
-// --- Domínio AgroTech (Supabase) ---
+"use client"
 
-export type CategoriaInsumo = 'Sementes' | 'Adubos' | 'Diesel' | 'Defensivos' | 'Outros'
+import { useMemo, useState } from 'react'
+import { LoteCard } from '@/components/roca/LoteCard'
+import { NovoLoteForm } from '@/components/roca/NovoLoteForm'
+import { useEstoque } from '@/hooks/useEstoque'
+import { useLotes } from '@/hooks/useLotes'
 
-export type Lote = {
-  id: string
-  cultura: string
-  variedade: string | null
-  areaHectares: number
-  /** Data ISO (yyyy-mm-dd) */
-  dataPlantio: string
-  custoTotal: number
-  createdAt: string
-}
+const NEON_GREEN = "#00FF66"
+const FILTERS = ['Todos', 'Soja', 'Milho', 'Algodão'] as const
+type Filtro = typeof FILTERS[number]
 
-export type NovoLoteInput = {
-  cultura: string
-  variedade?: string | null
-  areaHectares: number
-  dataPlantio: string
-}
+export function RocaPage() {
+  const { lotes, loading, error, refetch: refetchLotes } = useLotes()
+  const { itens: itensEstoque, refetch: refetchEstoque } = useEstoque()
 
-export type ItemEstoque = {
-  id: string
-  nome: string
-  categoria: CategoriaInsumo
-  quantidade: number
-  unidade: string
-  precoUnitario: number
-  createdAt: string
-}
+  const [activeFilter, setActiveFilter] = useState<Filtro>('Todos')
 
-export type NovoItemEstoqueInput = {
-  nome: string
-  categoria: CategoriaInsumo
-  quantidade: number
-  unidade: string
-  precoUnitario: number
-}
+  const totalLotes = lotes.length
 
-export type TipoMovimentacao = 'insumo' | 'mao_de_obra' | 'diesel' | 'compra_avulsa' | 'nota'
+  // TODO: quando existir um campo de status/colheita no tipo Lote,
+  // trocar por: lotes.filter(l => l.status !== 'colhido').length
+  const plantiosAtivos = totalLotes
 
-export type Movimentacao = {
-  id: string
-  loteId: string
-  itemEstoqueId: string | null
-  tipo: TipoMovimentacao
-  descricao: string | null
-  quantidade: number | null
-  valor: number
-  /** Data ISO (yyyy-mm-dd) */
-  data: string
-  agendado: boolean
-  createdAt: string
-}
+  const areaTotalHa = useMemo(
+    () => lotes.reduce((soma, l) => soma + (l.areaHectares || 0), 0),
+    [lotes]
+  )
 
-export type NovaMovimentacaoInput = {
-  loteId: string
-  itemEstoqueId?: string | null
-  tipo: TipoMovimentacao
-  descricao?: string | null
-  quantidade?: number | null
-  valor: number
-  data: string
-  agendado?: boolean
-}
+  const lotesFiltrados = useMemo(() => {
+    if (activeFilter === 'Todos') return lotes
+    return lotes.filter(
+      (l) => l.cultura?.toLowerCase() === activeFilter.toLowerCase()
+    )
+  }, [lotes, activeFilter])
 
-export type Venda = {
-  id: string
-  loteId: string | null
-  quantidade: number
-  valorTotal: number
-  data: string
-  createdAt: string
-}
+  return (
+    <div className="min-h-screen bg-[#040C08] text-white p-4 font-sans max-w-md mx-auto pb-24">
 
-export type NovaVendaInput = {
-  loteId: string | null
-  quantidade: number
-  valorTotal: number
-  data: string
-}
-
-export type LancamentoFinanceiro = {
-  id: string
-  descricao: string
-  categoria: string | null
-  valor: number
-  loteId: string | null
-  data: string
-  createdAt: string
-}
-
-export type NovoLancamentoFinanceiroInput = {
-  descricao: string
-  categoria?: string | null
-  valor: number
-  loteId?: string | null
-  data: string
-}
+      {/* 1. CABEÇALHO INTEGRADO */}
+      <header className="flex justify-between items-start mb-6">
+        <div>
