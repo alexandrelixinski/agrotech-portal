@@ -4,7 +4,7 @@ import { NovoLoteForm } from '@/components/roca/NovoLoteForm'
 import { useEstoque } from '@/hooks/useEstoque'
 import { useLotes } from '@/hooks/useLotes'
 
-const NEON_GREEN = "#00FF66"
+const NEON_GREEN = '#00FF66'
 const FILTERS = ['Todos', 'Soja', 'Milho', 'Algodão'] as const
 type Filtro = typeof FILTERS[number]
 
@@ -15,112 +15,106 @@ export function RocaPage() {
   const [activeFilter, setActiveFilter] = useState<Filtro>('Todos')
 
   const listaLotes = lotes ?? []
-
   const totalLotes = listaLotes.length
-  const plantiosAtivos = listaLotes.length // Usando o tamanho da lista para evitar o erro de 'status'
+  const plantiosAtivos = listaLotes.length // TODO: ajustar quando houver campo de status
+
+  const areaTotalHa = useMemo(
+    () => listaLotes.reduce((soma, lote) => soma + Number(lote.areaHectares || 0), 0),
+    [listaLotes],
+  )
 
   const lotesFiltrados = useMemo(() => {
     if (activeFilter === 'Todos') return listaLotes
-    return listaLotes.filter(
-      (l) => l.cultura?.toLowerCase() === activeFilter.toLowerCase()
-    )
+    return listaLotes.filter((lote) => lote.cultura?.toLowerCase() === activeFilter.toLowerCase())
   }, [listaLotes, activeFilter])
 
   return (
-    <div className="min-h-screen bg-[#040C08] text-white p-4 font-sans max-w-md mx-auto pb-24">
-
-      <header className="flex justify-between items-start mb-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight" style={{ color: NEON_GREEN }}>
-            Lavoura
-          </h1>
-          <p className="text-gray-400 text-sm mt-1">
-            Gestão de plantio, lotes e aplicações
-          </p>
-        </div>
-
-        <div
-          className="px-3 py-1 rounded-full text-xs border bg-[#121614] font-medium whitespace-nowrap"
-          style={{ borderColor: `${NEON_GREEN}b3`, color: NEON_GREEN }}
-        >
-          Safra 25/26
-        </div>
-      </header>
-
-      <div className="grid grid-cols-2 gap-3 mb-6">
-        <div className="bg-[#121614] p-3 rounded-lg border border-white/5 flex flex-col justify-center min-h-[75px]">
-          <span className="text-2xl font-bold" style={{ color: NEON_GREEN }}>{totalLotes}</span>
-          <span className="text-gray-400 text-xs mt-0.5">Total de Lotes</span>
-        </div>
-
-        <div className="bg-[#121614] p-3 rounded-lg border border-white/5 flex flex-col justify-center min-h-[75px]">
-          <span className="text-2xl font-bold" style={{ color: NEON_GREEN }}>847 ha</span>
-          <span className="text-gray-400 text-xs mt-0.5">Área Plantada</span>
-        </div>
-
-        <div className="bg-[#121614] p-3 rounded-lg border border-white/5 flex flex-col justify-center min-h-[75px]">
-          <span className="text-2xl font-bold" style={{ color: NEON_GREEN }}>{plantiosAtivos}</span>
-          <span className="text-gray-400 text-xs mt-0.5">Plantios Ativos</span>
-        </div>
-
-        <div className="bg-[#121614] p-3 rounded-lg border border-white/5 flex flex-col justify-center min-h-[75px]">
-          <span className="text-2xl font-bold" style={{ color: NEON_GREEN }}>5</span>
-          <span className="text-gray-400 text-xs mt-0.5">Aplicações Agendadas</span>
-        </div>
-      </div>
-
-      {/* FILTROS COM EVENTO DE CLIQUE */}
-      <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none mb-6">
-        {FILTERS.map((filter) => {
-          const isActive = filter === activeFilter
-          return (
-            <button
-              key={filter}
-              type="button"
-              onClick={() => setActiveFilter(filter)}
-              className="px-4 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap"
-              style={{
-                backgroundColor: isActive ? NEON_GREEN : '#1B1F1C',
-                color: isActive ? '#000000' : '#9CA3AF'
-              }}
-            >
-              {filter}
-            </button>
-          )
-        })}
-      </div>
-      
-      <div className="mb-6">
-        <NovoLoteForm onCreated={refetchLotes} />
-      </div>
-
-      {/* LISTAGEM DOS LOTES FILTRADOS */}
-      {loading ? <p className="text-gray-400 text-sm animate-pulse">Carregando lotes...</p> : null}
-      {error ? (
-        <p className="p-3 bg-red-900/40 text-red-400 rounded-lg text-sm border border-red-500/30 mb-4" role="alert">
-          {error}
-        </p>
-      ) : null}
-
-      {!loading && !error ? (
-        lotesFiltrados.length === 0 ? (
-          <p className="text-gray-400 text-sm text-center py-6 bg-[#121614] rounded-lg border border-white/5">
-            Nenhum lote encontrado para esta cultura.
-          </p>
-        ) : (
-          <div className="space-y-4">
-            {lotesFiltrados.map((lote) => (
-              <LoteCard
-                key={lote.id}
-                lote={lote}
-                itensEstoque={itensEstoque}
-                onLoteRemovido={refetchLotes}
-                onLoteAlterado={refetchLotes}
-                onEstoqueAlterado={refetchEstoque}
-              />
-            ))}
+    <section className="roca-page">
+      <div className="roca-page__inner">
+        <header className="roca-page__header">
+          <div>
+            <h1 className="roca-page__title">Lavoura</h1>
+            <p className="roca-page__subtitle">Gestão de plantio, lotes e aplicações</p>
           </div>
-        )
-      ) : null}
+          <span className="roca-page__tag">Safra 25/26</span>
+        </header>
 
-    </div>
+        <div className="roca-summary-grid">
+          <div className="roca-summary-card">
+            <span className="roca-summary-card__value" style={{ color: NEON_GREEN }}>
+              {totalLotes}
+            </span>
+            <span className="roca-summary-card__label">Total de Lotes</span>
+          </div>
+
+          <div className="roca-summary-card">
+            <span className="roca-summary-card__value" style={{ color: NEON_GREEN }}>
+              {areaTotalHa.toFixed(1)} ha
+            </span>
+            <span className="roca-summary-card__label">Área Plantada</span>
+          </div>
+
+          <div className="roca-summary-card">
+            <span className="roca-summary-card__value" style={{ color: NEON_GREEN }}>
+              {plantiosAtivos}
+            </span>
+            <span className="roca-summary-card__label">Plantios Ativos</span>
+          </div>
+
+          <div className="roca-summary-card">
+            <span className="roca-summary-card__value" style={{ color: NEON_GREEN }}>
+              5
+            </span>
+            <span className="roca-summary-card__label">Aplicações Agendadas</span>
+          </div>
+        </div>
+
+        <div className="roca-filters">
+          {FILTERS.map((filter) => {
+            const isActive = filter === activeFilter
+            return (
+              <button
+                key={filter}
+                type="button"
+                className={`roca-filter-button ${isActive ? 'roca-filter-button--active' : ''}`}
+                onClick={() => setActiveFilter(filter)}
+              >
+                {filter}
+              </button>
+            )
+          })}
+        </div>
+
+        <div className="roca-form-wrapper">
+          <NovoLoteForm onCreated={refetchLotes} />
+        </div>
+
+        {loading ? <p className="roca-page__status">Carregando lotes...</p> : null}
+        {error ? (
+          <p className="alert alert--error" role="alert">
+            {error}
+          </p>
+        ) : null}
+
+        {!loading && !error ? (
+          lotesFiltrados.length === 0 ? (
+            <p className="roca-page__empty">Nenhum lote encontrado para esta cultura.</p>
+          ) : (
+            <div className="roca-lote-list">
+              {lotesFiltrados.map((lote) => (
+                <LoteCard
+                  key={lote.id}
+                  lote={lote}
+                  itensEstoque={itensEstoque}
+                  onLoteRemovido={refetchLotes}
+                  onLoteAlterado={refetchLotes}
+                  onEstoqueAlterado={refetchEstoque}
+                />
+              ))}
+            </div>
+          )
+        ) : null}
+      </div>
+    </section>
+  )
+}
