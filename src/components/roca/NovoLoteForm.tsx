@@ -1,101 +1,127 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button } from '@/components/ui/Button'
-import { Card } from '@/components/ui/Card'
-import { hojeIso } from '@/lib/format'
 import { createLote } from '@/services/lotes'
+import { hojeIso } from '@/lib/format'
+import type { NovoLoteInput } from '@/types'
 
 type NovoLoteFormProps = {
   onCreated: () => void
+  culturaPadrao?: string
 }
 
-export function NovoLoteForm({ onCreated }: NovoLoteFormProps) {
-  const [cultura, setCultura] = useState('')
+export function NovoLoteForm({ onCreated, culturaPadrao }: NovoLoteFormProps) {
+  const [cultura, setCultura] = useState(culturaPadrao ?? 'Soja')
   const [variedade, setVariedade] = useState('')
   const [areaHectares, setAreaHectares] = useState('')
   const [dataPlantio, setDataPlantio] = useState(hojeIso())
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [mensagem, setMensagem] = useState<string | null>(null)
 
-  async function handleSubmit(event: React.FormEvent) {
+  useEffect(() => {
+    if (culturaPadrao) {
+      setCultura(culturaPadrao)
+    }
+  }, [culturaPadrao])
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (!cultura.trim()) return
+    setError(null)
+    setMensagem(null)
+
+    if (!cultura.trim() || !areaHectares.trim()) {
+      setError('Informe a cultura e a área em hectares.')
+      return
+    }
+
+    const novoLote: NovoLoteInput = {
+      cultura: cultura.trim(),
+      variedade: variedade.trim() || undefined,
+      areaHectares: Number(areaHectares.replace(',', '.')) || 0,
+      dataPlantio,
+    }
 
     setSubmitting(true)
-    setError(null)
     try {
-      await createLote({
-        cultura: cultura.trim(),
-        variedade: variedade.trim() || null,
-        areaHectares: Number(areaHectares) || 0,
-        dataPlantio,
-      })
-      setCultura('')
+      await createLote(novoLote)
+      setMensagem('Lote cadastrado com sucesso!')
       setVariedade('')
       setAreaHectares('')
       setDataPlantio(hojeIso())
       onCreated()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao cadastrar lote')
+      setError(err instanceof Error ? err.message : 'Erro ao cadastrar lote.')
     } finally {
       setSubmitting(false)
     }
   }
 
   return (
-    <Card title="🌱 Novo Lote">
+    <article className="card">
+      <h2 className="card__title">Novo lote</h2>
+      <p className="card__description">Adicione um lote e acompanhe sua produção de maneira organizada.</p>
+
       <form className="form-grid" onSubmit={handleSubmit}>
         <div className="form-row">
           <div className="field">
             <label htmlFor="cultura">Cultura</label>
-            <input
-              id="cultura"
-              value={cultura}
-              onChange={(e) => setCultura(e.target.value)}
-              placeholder="Ex: Milho"
-              required
-            />
+            <select id="cultura" value={cultura} onChange={(event) => setCultura(event.target.value)}>
+              {['Soja', 'Milho', 'Algodão', 'Fumo', 'Arroz', 'Trigo', 'Outra'].map((opcao) => (
+                <option key={opcao} value={opcao}>
+                  {opcao}
+                </option>
+              ))}
+            </select>
           </div>
+
           <div className="field">
             <label htmlFor="variedade">Variedade</label>
             <input
               id="variedade"
               value={variedade}
-              onChange={(e) => setVariedade(e.target.value)}
-              placeholder="Ex: AOB-962"
+              onChange={(event) => setVariedade(event.target.value)}
+              placeholder="Opcional"
             />
           </div>
         </div>
 
         <div className="form-row">
           <div className="field">
-            <label htmlFor="area">Hectares</label>
+            <label htmlFor="area-hectares">Área (ha)</label>
             <input
-              id="area"
+              id="area-hectares"
               type="number"
               min="0"
               step="0.01"
               value={areaHectares}
-              onChange={(e) => setAreaHectares(e.target.value)}
+              onChange={(event) => setAreaHectares(event.target.value)}
+              placeholder="0.00"
             />
           </div>
+
           <div className="field">
-            <label htmlFor="data-plantio">Data Plantio</label>
+            <label htmlFor="data-plantio">Data de plantio</label>
             <input
               id="data-plantio"
               type="date"
               value={dataPlantio}
-              onChange={(e) => setDataPlantio(e.target.value)}
+              onChange={(event) => setDataPlantio(event.target.value)}
             />
           </div>
         </div>
 
-        {error ? <p className="alert alert--error" role="alert">{error}</p> : null}
+        {mensagem ? <p className="alert alert--info">{mensagem}</p> : null}
+        {error ? (
+          <p className="alert alert--error" role="alert">
+            {error}
+          </p>
+        ) : null}
 
-        <Button type="submit" disabled={submitting || !cultura.trim()}>
-          {submitting ? 'Cadastrando…' : 'Cadastrar Lote'}
+        <Button type="submit" disabled={submitting || !cultura.trim() || !areaHectares.trim()}>
+          {submitting ? 'Cadastrando…' : 'Cadastrar lote'}
         </Button>
       </form>
-    </Card>
+    </article>
   )
 }
