@@ -1,7 +1,10 @@
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { APP_NAME, APP_VERSION } from '@/lib/constants'
 
 export function Footer() {
+  const [menuOpen, setMenuOpen] = useState(false)
+
   const menuItems = [
     { label: 'Lavoura', path: '/roca', icon: '🌱' },
     { label: 'Armazém', path: '/galpao', icon: '🏭' },
@@ -11,7 +14,24 @@ export function Footer() {
 
   return (
     <footer className="app-footer">
-      <nav className="app-footer__menu" aria-label="Navegação principal">
+      <div className="app-footer__toggle-row">
+        <button
+          type="button"
+          className="app-footer__toggle"
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((value) => !value)}
+        >
+          <span className="app-footer__toggle-label">Menu</span>
+          <span className={`app-footer__toggle-icon ${menuOpen ? 'app-footer__toggle-icon--open' : ''}`}>
+            ⌄
+          </span>
+        </button>
+      </div>
+
+      <nav
+        className={`app-footer__menu ${menuOpen ? 'app-footer__menu--open' : 'app-footer__menu--closed'}`}
+        aria-label="Navegação principal"
+      >
         {menuItems.map((item) => (
           <NavLink
             key={item.path}
@@ -20,6 +40,7 @@ export function Footer() {
             className={({ isActive }) =>
               isActive ? 'app-footer__link app-footer__link--active' : 'app-footer__link'
             }
+            onClick={() => setMenuOpen(false)}
           >
             <span className="app-footer__icon">{item.icon}</span>
             <span className="app-footer__label">{item.label}</span>
