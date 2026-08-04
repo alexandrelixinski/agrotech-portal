@@ -9,6 +9,7 @@ export function RocaPage() {
   const { itens: itensEstoque, refetch: refetchEstoque } = useEstoque()
 
   const [activeFilter, setActiveFilter] = useState<string>('Todos')
+  const [showNovoLoteModal, setShowNovoLoteModal] = useState(false)
 
   const listaLotes = lotes ?? []
   const totalLotes = listaLotes.length
@@ -72,17 +73,6 @@ export function RocaPage() {
         </div>
 
         <div className="roca-main-grid">
-          <div className="roca-panel roca-panel--form">
-            <div className="roca-panel__header">
-              <h2>Criar novo lote</h2>
-              <p>Preencha os dados principais e mantenha o controle do seu plantio.</p>
-            </div>
-            <NovoLoteForm
-              onCreated={refetchLotes}
-              culturaPadrao={activeFilter !== 'Todos' ? activeFilter : undefined}
-            />
-          </div>
-
           <div className="roca-panel roca-panel--list">
             <div className="roca-panel__header roca-panel__header--compact">
               <div>
@@ -137,6 +127,44 @@ export function RocaPage() {
             ) : null}
           </div>
         </div>
+
+        <button
+          type="button"
+          className="roca-add-button"
+          onClick={() => setShowNovoLoteModal(true)}
+          aria-label="Adicionar novo lote"
+        >
+          +
+        </button>
+
+        {showNovoLoteModal ? (
+          <div className="roca-modal-backdrop" onClick={() => setShowNovoLoteModal(false)}>
+            <div className="roca-modal" onClick={(event) => event.stopPropagation()}>
+              <div className="roca-modal__header">
+                <div>
+                  <h2>Adicionar novo lote</h2>
+                  <p>Digite a cultura e os dados do lote no mesmo lugar.</p>
+                </div>
+                <button
+                  type="button"
+                  className="roca-modal__close"
+                  onClick={() => setShowNovoLoteModal(false)}
+                  aria-label="Fechar modal"
+                >
+                  ×
+                </button>
+              </div>
+
+              <NovoLoteForm
+                onCreated={() => {
+                  refetchLotes()
+                  setShowNovoLoteModal(false)
+                }}
+                culturaPadrao={activeFilter !== 'Todos' ? activeFilter : undefined}
+              />
+            </div>
+          </div>
+        ) : null}
       </div>
     </section>
   )

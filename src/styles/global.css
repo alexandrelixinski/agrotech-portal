@@ -752,7 +752,7 @@ body {
 
 .roca-summary-grid {
   display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
@@ -776,6 +776,71 @@ body {
 .roca-summary-card strong {
   font-size: 1.55rem;
   font-weight: 800;
+}
+
+.roca-add-button {
+  position: fixed;
+  right: 1rem;
+  bottom: 5.4rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 1.9rem;
+  line-height: 1;
+  box-shadow: 0 16px 30px rgba(22, 163, 74, 0.18);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+}
+
+.roca-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 10000;
+}
+
+.roca-modal {
+  width: min(540px, 100%);
+  background: var(--color-surface);
+  border-radius: 1.25rem;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.16);
+  padding: 1.5rem;
+  position: relative;
+}
+
+.roca-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.roca-modal__close {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 0.85rem;
+  font-size: 1.35rem;
+  background: var(--color-border);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.field__hint {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  margin-top: 0.35rem;
 }
 
 .roca-main-grid {
@@ -878,7 +943,7 @@ body {
 
 @media (min-width: 1024px) {
   .roca-summary-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .roca-main-grid {

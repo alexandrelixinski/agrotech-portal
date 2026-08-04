@@ -66,13 +66,14 @@ export function NovoLoteForm({ onCreated, culturaPadrao }: NovoLoteFormProps) {
         <div className="form-row">
           <div className="field">
             <label htmlFor="cultura">Cultura</label>
-            <select id="cultura" value={cultura} onChange={(event) => setCultura(event.target.value)}>
-              {['Soja', 'Milho', 'Algodão', 'Fumo', 'Arroz', 'Trigo', 'Outra'].map((opcao) => (
-                <option key={opcao} value={opcao}>
-                  {opcao}
-                </option>
-              ))}
-            </select>
+            <input
+              id="cultura"
+              type="text"
+              value={cultura}
+              onChange={(event) => setCultura(event.target.value)}
+              placeholder="Ex: milho, soja, fumo"
+            />
+            <span className="field__hint">Digite a cultura e o lote aparecerá na lista.</span>
           </div>
 
           <div className="field">
