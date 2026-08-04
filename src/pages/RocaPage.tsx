@@ -63,6 +63,22 @@ export function RocaPage() {
           </div>
         </div>
 
+        <div className="roca-filters">
+          {culturasDisponiveis.map((filter) => {
+            const isActive = filter === activeFilter
+            return (
+              <button
+                key={filter}
+                type="button"
+                className={`roca-filter-chip ${isActive ? 'roca-filter-chip--active' : ''}`}
+                onClick={() => setActiveFilter(filter)}
+              >
+                {filter}
+              </button>
+            )
+          })}
+        </div>
+
         <div className="roca-main-grid">
           <div className="roca-panel roca-panel--list">
             <div className="roca-panel__header roca-panel__header--compact">

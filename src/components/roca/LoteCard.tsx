@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { Button } from '@/components/ui/Button'
 import { Diario } from '@/components/roca/Diario'
 import { OperacaoForm } from '@/components/roca/OperacaoForm'
-import { getAlertasLote } from '@/lib/alertas'
+import { useMovimentacoes } from '@/hooks/useMovimentacoes'
 import { diasDesde, formatCurrency, formatDateBR } from '@/lib/format'
 import { deleteLote } from '@/services/lotes'
 import type { ItemEstoque, Lote } from '@/types'
@@ -20,7 +20,14 @@ export function LoteCard({ lote, itensEstoque, onLoteRemovido, onLoteAlterado, o
   const [mostrarOperacao, setMostrarOperacao] = useState(false)
   const [mostrarDiario, setMostrarDiario] = useState(false)
   const [removendo, setRemovendo] = useState(false)
-  const alertas = getAlertasLote(lote)
+  const { movimentacoes } = useMovimentacoes(lote.id)
+  const movimentacoesAgendadas = useMemo(() => {
+    const hoje = new Date()
+    hoje.setHours(0, 0, 0, 0)
+    return movimentacoes
+      .filter((mov) => new Date(`${mov.data}T00:00:00`).getTime() > hoje.getTime())
+      .sort((a, b) => a.data.localeCompare(b.data))
+  }, [movimentacoes])
 
   async function handleRemover() {
     if (!window.confirm(`Excluir o lote "${lote.cultura}"? Isso não pode ser desfeito.`)) return
@@ -59,11 +66,13 @@ export function LoteCard({ lote, itensEstoque, onLoteRemovido, onLoteAlterado, o
 
       <div className="lote-card__schedule">
         <span className="lote-card__schedule-title">Próx. / Agendados</span>
-        {alertas.length > 0 ? (
-          alertas.map((alerta, idx) => (
-            <div className="lote-card__schedule-item" key={idx}>
-              <span>{alerta.nivel === 'warning' ? '⚠️' : '🔔'}</span>
-              <span>{alerta.mensagem}</span>
+        {movimentacoesAgendadas.length > 0 ? (
+          movimentacoesAgendadas.map((mov) => (
+            <div className="lote-card__schedule-item" key={mov.id}>
+              <span>🔔</span>
+              <span>
+                {mov.descricao ?? mov.tipo} — {formatDateBR(mov.data)}
+              </span>
             </div>
           ))
         ) : (
