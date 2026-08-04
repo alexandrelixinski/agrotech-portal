@@ -100,44 +100,7 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0.75rem 0 0 0;
-}
-
-.app-footer__toggle-row {
-  width: 100%;
-  max-width: 640px;
-  display: flex;
-  justify-content: center;
-  padding: 0.5rem 1rem 0;
-}
-
-.app-footer__toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  width: 100%;
-  max-width: 220px;
-  padding: 0.85rem 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: 999px;
-  background: var(--color-surface);
-  color: var(--color-text);
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.app-footer__toggle:hover {
-  background: rgba(22, 163, 74, 0.08);
-}
-
-.app-footer__toggle-icon {
-  display: inline-flex;
-  transition: transform 0.2s ease;
-}
-
-.app-footer__toggle-icon--open {
-  transform: rotate(180deg);
+  padding: 0.35rem 0 0 0;
 }
 
 .app-footer__menu {
@@ -146,19 +109,9 @@ a {
   align-items: center;
   width: 100%;
   max-width: 640px;
-  gap: 0.5rem;
-  padding: 0.35rem 1rem 0.75rem;
-  transition: max-height 0.25s ease, opacity 0.25s ease, padding 0.25s ease;
-  overflow: hidden;
-  max-height: 0;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.app-footer__menu--open {
-  max-height: 240px;
-  opacity: 1;
-  pointer-events: auto;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem 0.65rem;
+  overflow: visible;
 }
 
 .app-footer__link {
@@ -168,13 +121,58 @@ a {
   justify-content: center;
   text-decoration: none;
   color: var(--color-muted);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  gap: 0.2rem;
-  padding: 10px 12px;
-  border-radius: 18px;
-  width: 100%;
+  gap: 0.15rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 14px;
+  min-width: 62px;
   transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.app-footer__link:hover {
+  background-color: rgba(15, 23, 42, 0.04);
+  transform: translateY(-1px);
+}
+
+.app-footer__icon {
+  font-size: 1.05rem;
+}
+
+.app-footer__label {
+  line-height: 1.1;
+}
+
+.app-footer__meta {
+  display: none;
+}
+
+.app-main {
+  flex: 1;
+  padding-block: 2.5rem;
+  padding-bottom: 5.2rem;
+}
+
+/* Roca summary */
+.roca-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.roca-summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.roca-summary-card__title {
+  font-size: 0.86rem;
+  color: var(--color-muted);
+}
+
+.roca-summary-card strong {
+  font-size: 1.25rem;
 }
 
 .app-footer__link:hover {
@@ -217,10 +215,6 @@ a {
     background-color: var(--color-surface);
   }
 
-  .app-footer__toggle-row {
-    display: none;
-  }
-
   .app-footer__menu {
     flex-direction: column;
     align-items: stretch;
@@ -259,13 +253,6 @@ a {
 
   .app-footer__icon {
     font-size: 1.35rem;
-  }
-
-  .app-footer__meta {
-    text-align: left;
-    padding: 0 1rem 0;
-    font-size: 0.8rem;
-    color: var(--color-muted);
   }
 
   .app-shell {

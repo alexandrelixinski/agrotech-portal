@@ -27,9 +27,6 @@ export function RocaPage() {
     return ['Todos', ...Array.from(culturasSet)]
   }, [listaLotes])
 
-  const culturasDistintas = Math.max(0, culturasDisponiveis.length - 1)
-  const ultimoLote = listaLotes[0]
-
   const lotesFiltrados = useMemo(() => {
     if (activeFilter === 'Todos') return listaLotes
     return listaLotes.filter((lote) => lote.cultura?.toLowerCase() === activeFilter.toLowerCase())
@@ -71,14 +68,6 @@ export function RocaPage() {
           <div className="roca-summary-card">
             <span className="roca-summary-card__title">Área plantada</span>
             <strong>{areaTotalHa.toFixed(1)} ha</strong>
-          </div>
-          <div className="roca-summary-card">
-            <span className="roca-summary-card__title">Culturas distintas</span>
-            <strong>{culturasDistintas}</strong>
-          </div>
-          <div className="roca-summary-card">
-            <span className="roca-summary-card__title">Último lote</span>
-            <strong>{ultimoLote?.cultura ?? 'Nenhum'}</strong>
           </div>
         </div>
 
