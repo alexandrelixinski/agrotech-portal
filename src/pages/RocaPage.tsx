@@ -8,18 +8,50 @@ export function RocaPage() {
   const { lotes, loading, error, refetch: refetchLotes } = useLotes()
   const { itens: itensEstoque, refetch: refetchEstoque } = useEstoque()
 
+  const [activeFilter, setActiveFilter] = useState<string>('Todos')
   const [showNovoLoteModal, setShowNovoLoteModal] = useState(false)
 
   const listaLotes = lotes ?? []
-  const totalLotes = listaLotes.length
+  const culturasDisponiveis = useMemo(() => {
+    const culturasSet = new Set<string>()
+    listaLotes.forEach((lote) => {
+      if (lote.cultura?.trim()) {
+        culturasSet.add(lote.cultura.trim())
+      }
+    })
+    return ['Todos', ...Array.from(culturasSet)]
+  }, [listaLotes])
+
+  const lotesFiltrados = useMemo(() => {
+    if (activeFilter === 'Todos') return listaLotes
+    return listaLotes.filter((lote) => lote.cultura?.trim().toLowerCase() === activeFilter.toLowerCase())
+  }, [listaLotes, activeFilter])
+
+  const totalLotes = lotesFiltrados.length
   const areaTotalHa = useMemo(
-    () => listaLotes.reduce((total, lote) => total + Number(lote.areaHectares || 0), 0),
-    [listaLotes]
+    () => lotesFiltrados.reduce((total, lote) => total + Number(lote.areaHectares || 0), 0),
+    [lotesFiltrados]
   )
 
   return (
     <section className="roca-page">
       <div className="roca-page__inner">
+        <div className="roca-filters">
+          {culturasDisponiveis.map((filter) => {
+            const isActive = filter === activeFilter
+            return (
+              <button
+                key={filter}
+                type="button"
+                className={`roca-filter-chip ${isActive ? 'roca-filter-chip--active' : ''}`}
+                onClick={() => setActiveFilter(filter)}
+              >
+                {filter}
+              </button>
+            )
+          })}
+        </div>
+
         <div className="roca-summary-grid">
           <div className="roca-summary-card">
             <span className="roca-summary-card__title">Total de lotes</span>

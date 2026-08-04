@@ -948,7 +948,10 @@ body {
 }
 
 .roca-filters {
-  display: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .roca-filter-chip {
