@@ -12,6 +12,9 @@ export function Header() {
           </span>
           AgroTech Portal
         </NavLink>
+        <button type="button" className="app-header__profile" aria-label="Acessar perfil">
+          👤
+        </button>
       </div>
     </header>
   )

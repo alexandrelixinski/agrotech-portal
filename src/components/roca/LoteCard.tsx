@@ -23,7 +23,7 @@ export function LoteCard({ lote, itensEstoque, onLoteRemovido, onLoteAlterado, o
   const alertas = getAlertasLote(lote)
 
   async function handleRemover() {
-    if (!window.confirm(`Remover o lote "${lote.cultura}"? Isso também apaga o histórico dele.`)) return
+    if (!window.confirm(`Excluir o lote "${lote.cultura}"? Isso não pode ser desfeito.`)) return
     setRemovendo(true)
     try {
       await deleteLote(lote.id)
@@ -35,6 +35,15 @@ export function LoteCard({ lote, itensEstoque, onLoteRemovido, onLoteAlterado, o
 
   return (
     <article className="card lote-card">
+      <button
+        type="button"
+        className="lote-card__close"
+        onClick={handleRemover}
+        disabled={removendo}
+        aria-label="Excluir lote"
+      >
+        ×
+      </button>
       <div className="lote-card__header">
         <div>
           <h3 className="card__title">🌱 {lote.cultura}</h3>
@@ -46,17 +55,21 @@ export function LoteCard({ lote, itensEstoque, onLoteRemovido, onLoteAlterado, o
           </p>
           <p className="lote-card__meta">💰 Custo total: {formatCurrency(lote.custoTotal)}</p>
         </div>
-        <Button variant="ghost" onClick={handleRemover} disabled={removendo}>
-          🗑️ Remover Lote
-        </Button>
       </div>
 
-      {alertas.map((alerta, idx) => (
-        <p className={`alert alert--${alerta.nivel}`} key={idx}>
-          {alerta.nivel === 'warning' ? '⚠️ ' : '🚜 '}
-          {alerta.mensagem}
-        </p>
-      ))}
+      <div className="lote-card__schedule">
+        <span className="lote-card__schedule-title">Próx. / Agendados</span>
+        {alertas.length > 0 ? (
+          alertas.map((alerta, idx) => (
+            <div className="lote-card__schedule-item" key={idx}>
+              <span>{alerta.nivel === 'warning' ? '⚠️' : '🔔'}</span>
+              <span>{alerta.mensagem}</span>
+            </div>
+          ))
+        ) : (
+          <p className="lote-card__schedule-empty">Nenhuma aplicação agendada no momento.</p>
+        )}
+      </div>
 
       <div className="lote-card__actions">
         <Button variant="ghost" onClick={() => setMostrarOperacao((v) => !v)}>

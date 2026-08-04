@@ -8,7 +8,6 @@ export function RocaPage() {
   const { lotes, loading, error, refetch: refetchLotes } = useLotes()
   const { itens: itensEstoque, refetch: refetchEstoque } = useEstoque()
 
-  const [activeFilter, setActiveFilter] = useState<string>('Todos')
   const [showNovoLoteModal, setShowNovoLoteModal] = useState(false)
 
   const listaLotes = lotes ?? []
@@ -17,21 +16,6 @@ export function RocaPage() {
     () => listaLotes.reduce((total, lote) => total + Number(lote.areaHectares || 0), 0),
     [listaLotes]
   )
-
-  const culturasDisponiveis = useMemo(() => {
-    const culturasSet = new Set<string>()
-    listaLotes.forEach((lote) => {
-      if (lote.cultura && lote.cultura.trim() !== '') {
-        culturasSet.add(lote.cultura.trim())
-      }
-    })
-    return ['Todos', ...Array.from(culturasSet)]
-  }, [listaLotes])
-
-  const lotesFiltrados = useMemo(() => {
-    if (activeFilter === 'Todos') return listaLotes
-    return listaLotes.filter((lote) => lote.cultura?.toLowerCase() === activeFilter.toLowerCase())
-  }, [listaLotes, activeFilter])
 
   return (
     <section className="roca-page">
@@ -44,22 +28,6 @@ export function RocaPage() {
           </div>
           <span className="roca-page__tag">Safra 25/26</span>
         </header>
-
-        <div className="roca-filters">
-          {culturasDisponiveis.map((filter) => {
-            const isActive = filter === activeFilter
-            return (
-              <button
-                key={filter}
-                type="button"
-                className={`roca-filter-chip ${isActive ? 'roca-filter-chip--active' : ''}`}
-                onClick={() => setActiveFilter(filter)}
-              >
-                {filter}
-              </button>
-            )
-          })}
-        </div>
 
         <div className="roca-summary-grid">
           <div className="roca-summary-card">
@@ -77,22 +45,6 @@ export function RocaPage() {
             <div className="roca-panel__header roca-panel__header--compact">
               <div>
                 <h2>Lotes cadastrados</h2>
-                <p>Lista de lotes atualizada para acesso rápido.</p>
-              </div>
-              <div className="roca-filter-group">
-                {culturasDisponiveis.map((filter) => {
-                  const isActive = filter === activeFilter
-                  return (
-                    <button
-                      key={filter}
-                      type="button"
-                      className={`roca-filter-chip ${isActive ? 'roca-filter-chip--active' : ''}`}
-                      onClick={() => setActiveFilter(filter)}
-                    >
-                      {filter}
-                    </button>
-                  )
-                })}
               </div>
             </div>
 
@@ -104,15 +56,13 @@ export function RocaPage() {
             ) : null}
 
             {!loading && !error ? (
-              lotesFiltrados.length === 0 ? (
+              listaLotes.length === 0 ? (
                 <p className="roca-page__empty">
-                  {activeFilter === 'Todos'
-                    ? 'Nenhum lote cadastrado. Cadastre o primeiro lote para começar.'
-                    : `Nenhum lote encontrado para a cultura "${activeFilter}".`}
+                  Nenhum lote cadastrado. Cadastre o primeiro lote para começar.
                 </p>
               ) : (
                 <div className="roca-lote-list">
-                  {lotesFiltrados.map((lote) => (
+                  {listaLotes.map((lote) => (
                     <LoteCard
                       key={lote.id}
                       lote={lote}
