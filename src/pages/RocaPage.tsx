@@ -20,15 +20,6 @@ export function RocaPage() {
   return (
     <section className="roca-page">
       <div className="roca-page__inner">
-        <header className="roca-page__header">
-          <div>
-            <p className="roca-page__eyebrow">Minha Roça</p>
-            <h1 className="roca-page__title">Lavoura</h1>
-            <p className="roca-page__subtitle">Controle seus lotes, acompanhe áreas e organize operações com clareza.</p>
-          </div>
-          <span className="roca-page__tag">Safra 25/26</span>
-        </header>
-
         <div className="roca-summary-grid">
           <div className="roca-summary-card">
             <span className="roca-summary-card__title">Total de lotes</span>
@@ -110,7 +101,6 @@ export function RocaPage() {
                   refetchLotes()
                   setShowNovoLoteModal(false)
                 }}
-                culturaPadrao={activeFilter !== 'Todos' ? activeFilter : undefined}
               />
             </div>
           </div>
